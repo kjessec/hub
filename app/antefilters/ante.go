@@ -1,8 +1,8 @@
 package antefilters
 
 import (
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 var _ sdk.AnteDecorator = MessageFilterDecorator{}
@@ -25,7 +25,7 @@ func (palc MessageFilterDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 	for _, m := range tx.GetMsgs() {
 		for _, f := range palc.filters {
 			if err := f(ctx, m, simulate); err != nil {
-				return ctx, sdkerrors.Wrap(err, "filter invariant")
+				return ctx, errors.Wrap(err, "message filter invariant")
 			}
 		}
 	}
